@@ -1,0 +1,19 @@
+.map {
+  width: 90%;
+  margin: 2em;
+  height: 70%;
+  border: 3em;
+  border-color: black;
+  background-color: #fff;
+}
+
+.btn-submit {
+  color: #000;
+  border-color:    rgba( 186, 12, 47, 1) 0%,;
+  background: linear-gradient(
+    90deg,
+    rgb(255, 255, 255) 0%,
+    rgb(231, 231, 231) 35%,
+    rgb(229, 229, 229) 100%
+  );  
+}
