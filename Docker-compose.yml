@@ -27,3 +27,14 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: david@example.com
       PGADMIN_DEFAULT_PASSWORD: password
+
+  postgis:
+    image: postgis/postgis:latest
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: david
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+    depends_on:
+      - db
