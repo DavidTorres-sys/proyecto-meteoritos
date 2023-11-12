@@ -1,0 +1,1 @@
+from .meteorite import Meteorite
