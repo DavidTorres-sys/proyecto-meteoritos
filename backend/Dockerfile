@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.9-alpine
 
 # Set environment variables for Python
 ENV PYTHONDONTWRITEBYTECODE 1

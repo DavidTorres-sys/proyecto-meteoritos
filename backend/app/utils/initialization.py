@@ -1,5 +1,8 @@
 import csv
 import logging
+
+from sqlalchemy import update, func
+from app.domain.models import Meteorite
 from sqlalchemy.orm import Session
 from app.services.crud.tables_data import get_tables_have_data
 from app.db.database import engine
@@ -15,7 +18,6 @@ def init_data_on_startup(db: Session):
             with open("app/db/meteorite-landings/meteorite.csv", newline='', encoding='utf-8') as csvfile:
                 csv_reader = csv.reader(csvfile, delimiter=',', quotechar='"')
                 data = list(csv_reader)
-
                 for entry in data:
                     try:
                         cleaned_entry = parse_csv_entry(entry)
@@ -29,5 +31,6 @@ def init_data_on_startup(db: Session):
                         continue
     except Exception as e:
         logger.error("Error during data initialization: %s", str(e))
+
 
         

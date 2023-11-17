@@ -6,7 +6,7 @@ def parse_csv_entry(entry):
 
 def create_meteorite_object(cleaned_entry):
     geolocation = cleaned_entry[-1].strip('"')
-    cleaned_entry = [field if field != '' else None for field in cleaned_entry]
+    cleaned_entry = [field.strip() if field != '' else None for field in cleaned_entry]
 
     return Meteorite(
         name=cleaned_entry[0],
