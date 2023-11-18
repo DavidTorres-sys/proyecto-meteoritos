@@ -1,16 +1,22 @@
+from typing import Optional
 from pydantic import BaseModel
 
-class Meteorite(BaseModel):
+class MeteoriteBase(BaseModel):
     name: str
-    id: int
     nametype: str
-    recclass: str
-    mass: int
-    fall: str
+    mass: float
     year: int
-    reclat: float
-    reclong: float
-    geolocation: str
+
+class MeteoriteCreate(MeteoriteBase):
+    fall_id: Optional[int] = None
+    reclass_id: Optional[int] = None
+    geolocation_id: Optional[int] = None
+
+class Meteorite(MeteoriteBase):
+    id: int
+    fall_id: Optional[int] = None
+    reclass_id: Optional[int] = None
+    geolocation_id: Optional[int] = None
 
     class Config:
         orm_mode = True

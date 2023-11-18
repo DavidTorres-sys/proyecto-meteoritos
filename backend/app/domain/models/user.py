@@ -3,11 +3,13 @@ from sqlalchemy.orm import relationship
 from app.db.database import Base
 
 class User(Base):
+	__tablename__ = "user"
+	
 	id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 	name = Column(String)
 	last_name = Column(String)
 	email = Column(String, unique=True)
 	password = Column(String)
-
-	geolocation_id = Column(Integer, ForeignKey("geolocation.id"))
-	geolocation = relationship("Geolocation", back_populates="user")
+	
+	form = relationship("Form", back_populates="user")
+	user_geolocation = relationship("UserGeolocation", back_populates="user")
