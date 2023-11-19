@@ -13,7 +13,10 @@ class FormBase(BaseModel):
 class FormCreate(FormBase):
     user_id: Optional[int] = None
 
-class Form(FormBase):
+class FormUpdate(FormBase):
+    pass
+
+class FormResponse(FormBase):
     id: int
     user_id: Optional[int] = None
 

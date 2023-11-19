@@ -1,4 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
+from sqlalchemy.ext.asyncio import AsyncSession
+
 
 class BASEcrud:
     def __init__(self, model):
@@ -27,6 +30,6 @@ class BASEcrud:
         db.delete(db_obj)
         db.commit()
         return db_obj
-    
+
     def read_all(self, db: Session, skip: int = 0, limit: int = 100):
         return db.query(self.model).offset(skip).limit(limit).all()

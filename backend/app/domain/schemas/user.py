@@ -6,11 +6,14 @@ class UserBase(BaseModel):
     last_name: str
     email: str
 
+class UserUpdate(UserBase):
+    pass
+
 class UserCreate(UserBase):
     password: str
     geolocation_id: Optional[int] = None
 
-class User(UserBase):
+class UserResponse(UserBase):
     id: int
     geolocation_id: Optional[int] = None
 

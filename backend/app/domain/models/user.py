@@ -12,4 +12,4 @@ class User(Base):
 	password = Column(String)
 	
 	form = relationship("Form", back_populates="user")
-	user_geolocation = relationship("UserGeolocation", back_populates="user")
+	location_users = relationship("LocationUser", back_populates="user")

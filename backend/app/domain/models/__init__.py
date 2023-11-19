@@ -1,11 +1,11 @@
-from .meteorite import Meteorite
-from .fall import Fall
-from .reclass import Reclass
-from .meteorite_geolocation import MeteoriteGeolocation
 from .user import User
 from .form import Form
-from .user_geolocation import UserGeolocation
-from .country import Country
+from .location import Location
+from .earthquake import Earthquake
+from .magnitude import Magnitude
+from .source import Source
+from .status import Status
+from .location_user import LocationUser
 
 
 from app.db.database import Base
