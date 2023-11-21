@@ -1,0 +1,8 @@
+HOUSING_TYPE_APARTMENT = "Apartment"
+SUGGESTION_HOUSING_TYPE = "Consider securing heavy furniture and having emergency supplies in your apartment."
+SUGGESTION_EMERGENCY_RESOURCES = "Ensure your emergency resources are well-stocked and up-to-date."
+SUGGESTION_EVACUATION_PLAN = "Review and practice your evacuation plan regularly."
+SUGGESTION_EXPERIENCE_EMERGENCY = "Consider sharing your experience with emergency situations with neighbors for community preparedness."
+SUGGESTION_MEDICAL_CONDITIONS = "Ensure you have a well-prepared emergency medical kit."
+SUGGESTION_PARTICIPATION_DRILLS = "Continue participating in emergency drills for better preparedness."
+SUGGESTION_COMMUNICATION_DEVICE = "Keep your communication devices charged and easily accessible during emergencies."

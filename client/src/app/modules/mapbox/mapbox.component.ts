@@ -64,8 +64,8 @@ export class MapboxComponent implements OnInit {
   send() {
     // Define start and end coordinates
     const start = {
-      center: [this.lng, this.lat], // Replace with your actual coordinates
-      zoom: 6, // Replace with your desired zoom level
+      center: [this.lng, this.lat],
+      zoom: 6,
     };
 
     const end = {
