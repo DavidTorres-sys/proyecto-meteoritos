@@ -1,0 +1,30 @@
+<section id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="7000">
+            <img src="assets/quakes/alaska.jpg" class="d-block w-100" alt="..." />
+            <div class="carousel-caption">
+                <h1>{{labels.alaska}}</h1>
+                <p>{{labels.descripcion}}</p>
+            </div>
+        </div>
+        <div class="carousel-item" *ngFor="let slide of slides" data-bs-interval="7000">
+            <img [src]="slide.src" class="d-block w-100" alt="..." />
+            <div class="carousel-caption">
+                <h1>{{slide.nombre}}</h1>
+                <p>{{slide.descripcion}}</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev"></button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next"></button>
+</section>

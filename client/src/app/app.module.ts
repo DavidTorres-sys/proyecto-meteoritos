@@ -8,6 +8,9 @@ import { MapboxComponent } from './modules/mapbox/mapbox.component';
 import { HomeComponent } from './modules/home/home.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { EarthAnimationComponent } from './modules/earth-animation/earth-animation.component';
+import { CarouselComponent } from './modules/carousel/carousel.component';
+import { FormComponent } from './modules/form/form.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,12 +18,15 @@ import { EarthAnimationComponent } from './modules/earth-animation/earth-animati
     MapboxComponent,
     HomeComponent,
     NavbarComponent,
-    EarthAnimationComponent
+    EarthAnimationComponent,
+    CarouselComponent,
+    FormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NzGridModule
+    NzGridModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
