@@ -1,1 +1,1 @@
-# proyecto-meteoritos
+# proyecto-terremotos

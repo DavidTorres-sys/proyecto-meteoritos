@@ -8,6 +8,14 @@ ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container
 WORKDIR /app
 
+# Install system dependencies
+RUN apk add --no-cache \
+    postgresql-dev \
+    gcc \
+    musl-dev \
+    geos-dev \
+    libc-dev
+
 # Copy the requirements file into the container at /app
 COPY requirements.txt /app/
 
@@ -22,3 +30,4 @@ EXPOSE 8000
 
 # Define the command to run your FastAPI application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+

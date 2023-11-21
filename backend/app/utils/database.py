@@ -1,4 +1,3 @@
-# app/utils/database_utils.py
 import logging
 from sqlalchemy.orm import Session
 from app.db.database import SessionLocal

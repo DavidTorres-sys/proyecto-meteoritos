@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.utils.database import get_db
 from app.domain.schemas import *
@@ -32,13 +33,33 @@ async def get_earthquakes_(skip: int = 0, limit: int = 100, db: Session = Depend
         raise HTTPException(status_code=404, detail="Earthquakes not found")
     return db_earthquakes
 
-@router.get("/earthquakes/{latitud}/{longitud}/{radio_en_km}", response_model=List[EarthquakeResponse])
-async def get_earthquakes_near(latitud: float, longitud: float, radio_en_km: float, db: Session = Depends(get_db)):
+
+@router.post("/calculate_earthquake_probability")
+async def calculate_earthquake_endpoint(
+    model_answers: FormCreate,
+    user_latitude: float = Body(...),
+    user_longitude: float = Body(...),
+    db: Session = Depends(get_db)
+):
     try:
-        db_earthquakes = await search_near_earthquakes(db, latitud, longitud, radio_en_km)
-        if db_earthquakes is None:
-            raise HTTPException(
-                status_code=404, detail="Earthquakes not found")
+        earthquake_probability_class = calculate_earthquake_probability(
+            user_latitude, user_longitude, model_answers)
+        return {"earthquake_probability_class": earthquake_probability_class}
     except Exception as e:
-        raise HTTPException(status_code=404, detail="Earthquakes not found")
-    return db_earthquakes
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/earthquake/near/", response_model=List[EarthquakeResponse])
+async def get_earthquakes_near_endpoint(
+    user_latitude: float,
+    user_longitude: float,
+    db: Session = Depends(get_db)
+):
+    try:
+        print(f"User Latitude: {user_latitude}, User Longitude: {user_longitude}")
+        db_earthquakes = get_earthquake_data(
+            db, user_latitude, user_longitude)
+        print(db_earthquakes)
+        return db_earthquakes
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

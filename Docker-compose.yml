@@ -1,17 +1,7 @@
 version: '3'
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: python:3.9-alpine
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-
   db:
-    image: postgres:14-alpine
+    image: postgis/postgis:14-3.1
     ports:
       - "5432:5432"
     volumes:
@@ -32,13 +22,12 @@ services:
       PGADMIN_DEFAULT_EMAIL: david@example.com
       PGADMIN_DEFAULT_PASSWORD: password
 
-  postgis:
-    image: postgis/postgis:latest
-    environment:
-      POSTGRES_DB: db
-      POSTGRES_USER: david
-      POSTGRES_PASSWORD: password
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: python:3.9-alpine
+    ports:
+      - "8000:8000"
     depends_on:
       - db

@@ -1,4 +1,6 @@
-from app.domain.models import Earthquake, Location, Magnitude, Source, Status
+from geoalchemy2 import Geometry
+
+from app.domain.models import Earthquake, LocationEarthquake, Magnitude, Source, Status
 
 
 def parse_csv_entry(entry):
@@ -15,10 +17,16 @@ def create_earthquake_object(cleaned_entry):
 
 
 def create_location_object(cleaned_entry):
-    return Location(
-        latitude=cleaned_entry[1] if cleaned_entry[1] else None,
-        longitude=cleaned_entry[2] if cleaned_entry[2] else None,
+    latitude = cleaned_entry[1] if cleaned_entry[1] else None
+    longitude = cleaned_entry[2] if cleaned_entry[2] else None
+    geom_wkt = f'SRID=4326;POINT({longitude} {latitude})'
+
+    return LocationEarthquake(
+        latitude=latitude,
+        longitude=longitude,
+        geom=geom_wkt
     )
+
 
 
 def create_magnitude_object(cleaned_entry):
@@ -35,12 +43,6 @@ def create_magnitude_object(cleaned_entry):
     return Magnitude(
         mag=cleaned_entry[4] if cleaned_entry[4] else None,
         magType=cleaned_entry[5] if cleaned_entry[5] else None,
-        nst=cleaned_entry[6] if cleaned_entry[6] else None,
-        gap=cleaned_entry[7] if cleaned_entry[7] else None,
-        dmin=cleaned_entry[8] if cleaned_entry[8] else None,
-        rms=cleaned_entry[9] if cleaned_entry[9] else None,
-        horizontalError=horizontal_error,
-        depthError=cleaned_entry[16] if cleaned_entry[16] else None,
         magError=cleaned_entry[17] if cleaned_entry[17] else None,
         magNst=cleaned_entry[18] if cleaned_entry[18] else None,
     )

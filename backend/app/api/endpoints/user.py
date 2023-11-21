@@ -18,3 +18,14 @@ async def create_user_(user: UserCreate, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return db_user
+
+
+@router.post("/user/form/", response_model=FormResponse)
+async def create_form_(form: FormCreate, db: Session = Depends(get_db)):
+    try:
+        db_form = create_form(db, form)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return db_form

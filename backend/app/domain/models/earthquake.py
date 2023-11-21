@@ -10,7 +10,7 @@ class Earthquake(Base):
     time = Column(DateTime(timezone=True), server_default=func.now())
     updated = Column(DateTime(timezone=True), onupdate=func.now())
 
-    location = relationship("Location", back_populates="earthquake")
+    location_earthquake = relationship("LocationEarthquake", back_populates="earthquake")
     magnitude = relationship("Magnitude", back_populates="earthquake")
     source = relationship("Source", back_populates="earthquake")
     status = relationship("Status", back_populates="earthquake")
