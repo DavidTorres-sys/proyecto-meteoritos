@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <img src="./assets/logo.png" />
     <button
       class="navbar-toggler"
       type="button"
@@ -20,25 +20,17 @@
             aria-current="page"
             [routerLink]="['/home']"
             routerLinkActive="router-link-active"
-            >Home</a
+            >HOME</a
           >
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item">
           <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
+            class="nav-link active"
+            aria-current="page"
+            [routerLink]="['/form']"
+            routerLinkActive="router-link-active"
+            >FORMULARIO</a
           >
-            Dropdown
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
         </li>
       </ul>
     </div>

@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, HostListener, NgZone, OnInit } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
@@ -20,6 +20,13 @@ export class EarthAnimationComponent implements OnInit {
 
   constructor(private ngZone: NgZone) {
     this.scene = new THREE.Scene();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event: Event) {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth - 17, window.innerHeight);
   }
 
   ngOnInit() {
@@ -68,7 +75,7 @@ export class EarthAnimationComponent implements OnInit {
 
     // Set up the renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(window.innerWidth - 17, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
     document.body.appendChild(this.renderer.domElement);

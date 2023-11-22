@@ -1,7 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  background-color: #000;
+:root {
+  /*Paleta de colores*/
+  --principal: #33FF99;
+  --secundario: red;
+  --neutroLuz: white;
+  --neutroOscuridad: black;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: var(--netroOscuridad);
+  font-size: 17px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
 }
