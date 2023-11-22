@@ -1,18 +1,12 @@
 # Standard Library Imports
-from sqlalchemy.sql import func
-
+from fastapi import HTTPException
 # Third-Party Imports
-from sqlalchemy.orm import Session, selectinload
-from geopy.distance import geodesic
-# from sklearn.neighbors import KDTree
-# import numpy as np
+from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 # Local Imports
-from app.domain.models import Earthquake, LocationEarthquake
-from app.domain.schemas import (
-    EarthquakeResponse, MagnitudeResponse, SourceResponse, StatusResponse)
-from app.domain.schemas.location_earthquake import LocationEarthquakeResponse
-from app.core.thresholds import thresholds, suggested_actions, factors
+from app.domain.models import Earthquake, LocationEarthquake, Magnitude
+from app.core.thresholds import thresholds, suggested_actions, magnitude_thresholds
 from app.core.constants import (
     HOUSING_TYPE_APARTMENT,
     SUGGESTION_HOUSING_TYPE,
@@ -34,72 +28,88 @@ def get_earthquakes(db: Session, skip: int = 0, limit: int = 100):
     return earthquake_crud.read_all(db, skip=skip, limit=limit)
 
 
-def get_earthquake_data(db: Session, user_latitude: float, user_longitude: float):
-    user_point = func.ST_GeomFromText(
-        f'POINT({user_longitude} {user_latitude})', 4326)
+def get_earthquake_data(db: Session, user_latitude: float, user_longitude: float, radius: float = 500000):
+    """
+    Returns a list of earthquake data within a given radius of the user's location.
+    Parameters:
+        db (Session): Database session
+        user_latitude (float): User's latitude
+        user_longitude (float): User's longitude
+        radius (float): Radius in meters (500km)
+    returns:
+        List of earthquake data within a given radius of the user's location
+    """
+    try:
+        # Create the user point using the SQLalchemy func library
+        user_point = func.ST_GeomFromText(
+            f'POINT({user_longitude} {user_latitude})', 4326)
 
-    earthquakes_query = (
-        db.query(Earthquake)
-        .join(LocationEarthquake, Earthquake.id == LocationEarthquake.earthquake_id)
-        .options(selectinload(Earthquake.location_earthquake))
-        .filter(
-            func.ST_DWithin(user_point, LocationEarthquake.geom, 50 * 1000),
+        nearest_earthquake = (
+            db.query(Earthquake)
+            .join(LocationEarthquake, Earthquake.id == LocationEarthquake.earthquake_id)
+            .join(Magnitude, Earthquake.id == Magnitude.earthquake_id)
+            .filter(func.ST_DistanceSphere(LocationEarthquake.geom, user_point) <= radius)
+            .order_by(Magnitude.mag.desc())
+            .limit(100)
+            .all()
         )
-        .limit(10)
-        .all()
-    )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    return earthquakes_query
+    return nearest_earthquake
 
 
-def calculate_magnitude_factor(earthquake_data):
+def calculate_average_magnitude(earthquake_data):
     """
-    Returns a factor based on the maximum magnitude of earthquakes within 500 km of the user's location.
+    Calculates the average magnitude from a list of earthquake data.
     Parameters:
-        earthquake_data (list): List of earthquake data
-    returns:
-        Factor based on the maximum magnitude of earthquakes within 500 km of the user's location"""
-    max_magnitude = max(
-        [quake.magnitude.value for quake in earthquake_data], default=0)
-    return max_magnitude * 0.1
-
-
-def calculate_distance_factor(earthquake_data, user_latitude, user_longitude):
+        earthquake_data (List[Earthquake]): List of earthquake data
+    Returns:
+        float: Average magnitude
     """
-    Returns a factor based on the closest distance of an earthquake within 500 km of the user's location.
-    Parameters:
-        earthquake_data (list): List of earthquake data
-        user_latitude (float): User's latitude
-        user_longitude (float): User's longitude
-    returns:
-        Factor based on the closest distance of an earthquake within 500 km of the user's location"""
-    closest_distance = min([geodesic((user_latitude, user_longitude), (quake.location_earthquake.latitude,
-                           quake.location_earthquake.longitude)).kilometers for quake in earthquake_data], default=0)
-    return 1 / (closest_distance + 1)
+
+    # Extract magnitudes from earthquake data, filtering out None values
+    magnitudes = [
+        magnitude.mag for earthquake in earthquake_data if earthquake.magnitude is not None for magnitude in earthquake.magnitude
+    ]
+
+    if magnitudes:
+        average_magnitude = sum(magnitudes) / 100
+
+        # Find the category based on the average magnitude
+        for category, threshold in magnitude_thresholds.items():
+            if average_magnitude >= threshold:
+                return category, average_magnitude
+    else:
+        return 0.0
 
 
-def calculate_earthquake_probability(user_latitude, user_longitude, model_answers):
+def calculate_probability(model_answers):
     """
-    Returns the probability of an earthquake occurring based on the user's location and answers to the form.
+    Calculate the probability of an earthquake based on model answers and average magnitude.
     Parameters:
-        user_latitude (float): User's latitude
-        user_longitude (float): User's longitude
-        model_answers (dict): User's answers to the form
-    returns:
+        model_answers (FormBase): User's answers to the form
+        average_magnitude (float): Average magnitude of earthquakes in the area
+    Returns:
         Probability of an earthquake occurring
     """
-    earthquake_data = get_earthquake_data(user_latitude, user_longitude)
 
-    factors_sum = sum(
-        weight if model_answers.get(key, default) == value else default
-        for key, (value, weight, default) in factors.items()
-    )
+    # Extract relevant information from model answers
+    housing_factor = 0.1 if model_answers.housing_type == "Apartment" else 0.0
+    emergency_resources_factor = 0.0 if model_answers.emergency_resources else 0.2
+    evacuation_plan_factor = 0.0 if model_answers.evacuation_plan else 0.2
+    experience_emergency_factor = 0.0 if model_answers.experience_emergency else 0.1
+    medical_conditions_factor = 0.0 if model_answers.medical_conditions else 0.1
+    participation_drills_factor = 0.0 if model_answers.participation_drills else 0.1
+    comunication_device_factor = 0.0 if model_answers.comunication_device else 0.1
 
-    magnitude_factor = calculate_magnitude_factor(earthquake_data)
-    distance_factor = calculate_distance_factor(
-        earthquake_data, user_latitude, user_longitude)
+    # Combine factors to get the final probability
+    probability = housing_factor + \
+        emergency_resources_factor + evacuation_plan_factor + \
+        experience_emergency_factor + medical_conditions_factor + \
+        participation_drills_factor + comunication_device_factor
 
-    probability = 0.5 + factors_sum + magnitude_factor + distance_factor
+    # Ensure probability is within the valid range [0, 1]
     probability = max(0.0, min(1.0, probability))
 
     for category, threshold in thresholds.items():
@@ -109,76 +119,22 @@ def calculate_earthquake_probability(user_latitude, user_longitude, model_answer
     return "Unknown", "Unable to determine suggestions at this time."
 
 
-# def get_earthquake_data_nns(session: Session, user_latitude: float, user_longitude: float):
-#     # Query the database for earthquake data including location information
-#     earthquakes = (
-#         session.query(Earthquake, LocationEarthquake)
-#         .join(LocationEarthquake)
-#         .all()
-#     )
-
-#     if not earthquakes:
-#         # Handle case where there are no earthquakes in the database
-#         return None
-
-#     # Extract latitude and longitude from the earthquake data
-#     earthquake_coordinates = [
-#         (location.latitude, location.longitude)
-#         for _, location in earthquakes
-#     ]
-
-#     # Create a KDTree from the earthquake data
-#     kdtree = KDTree(earthquake_coordinates)
-
-#     # Query the KDTree to find the index of the nearest earthquake
-#     distance, index = kdtree.query([(user_latitude, user_longitude)], k=1)
-
-#     # Get the earthquake data for the nearest neighbor
-#     nearest_earthquake = earthquakes[index[0]][0]
-
-#     return nearest_earthquake
-
-
 def generate_specific_suggestions(model_answers):
     suggestions = []
 
-    def add_suggestion(condition, text):
-        if condition:
-            suggestions.append(text)
-
-    add_suggestion(
-        model_answers.get("housing_type") == HOUSING_TYPE_APARTMENT,
-        SUGGESTION_HOUSING_TYPE
-    )
-
-    add_suggestion(
-        model_answers.get("emergency_resources"),
-        SUGGESTION_EMERGENCY_RESOURCES
-    )
-
-    add_suggestion(
-        model_answers.get("evacuation_plan"),
-        SUGGESTION_EVACUATION_PLAN
-    )
-
-    add_suggestion(
-        model_answers.get("experience_emergency"),
-        SUGGESTION_EXPERIENCE_EMERGENCY
-    )
-
-    add_suggestion(
-        model_answers.get("medical_conditions"),
-        SUGGESTION_MEDICAL_CONDITIONS
-    )
-
-    add_suggestion(
-        model_answers.get("participation_drills"),
-        SUGGESTION_PARTICIPATION_DRILLS
-    )
-
-    add_suggestion(
-        model_answers.get("communication_device"),
-        SUGGESTION_COMMUNICATION_DEVICE
-    )
+    if model_answers.housing_type == HOUSING_TYPE_APARTMENT:
+        suggestions.append(SUGGESTION_HOUSING_TYPE)
+    if not model_answers.emergency_resources:
+        suggestions.append(SUGGESTION_EMERGENCY_RESOURCES)
+    if not model_answers.evacuation_plan:
+        suggestions.append(SUGGESTION_EVACUATION_PLAN)
+    if not model_answers.experience_emergency:
+        suggestions.append(SUGGESTION_EXPERIENCE_EMERGENCY)
+    if not model_answers.medical_conditions:
+        suggestions.append(SUGGESTION_MEDICAL_CONDITIONS)
+    if not model_answers.participation_drills:
+        suggestions.append(SUGGESTION_PARTICIPATION_DRILLS)
+    if not model_answers.comunication_device:
+        suggestions.append(SUGGESTION_COMMUNICATION_DEVICE)
 
     return suggestions

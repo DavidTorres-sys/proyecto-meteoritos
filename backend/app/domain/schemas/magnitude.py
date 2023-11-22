@@ -5,7 +5,7 @@ class MagnitudeBase(BaseModel):
     mag: Optional[float]
     magType: Optional[str]
     magError: Optional[float]
-    magNst: Optional[int]
+    magNst: Optional[float]
 
 class MagnitudeCreate(MagnitudeBase):
     pass
@@ -16,6 +16,7 @@ class MagnitudeUpdate(MagnitudeBase):
 class MagnitudeResponse(MagnitudeBase):
     id: int
     earthquake_id: int
+
 
     class Config:
         orm_mode = True

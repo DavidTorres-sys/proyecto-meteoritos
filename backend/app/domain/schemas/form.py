@@ -12,7 +12,7 @@ class FormBase(BaseModel):
     result: Optional[str] = None
 
 class FormCreate(FormBase):
-    user_id: Optional[int] = None
+    pass
 
 class FormUpdate(FormBase):
     pass
