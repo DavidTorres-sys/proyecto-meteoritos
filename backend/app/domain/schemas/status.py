@@ -13,6 +13,5 @@ class StatusUpdate(StatusBase):
 class StatusResponse(StatusBase):
     id: int
     earthquake_id: int
-
     class Config:
         orm_mode = True

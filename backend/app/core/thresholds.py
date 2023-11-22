@@ -6,6 +6,14 @@ thresholds = {
     "Very Low": 0.0,
 }
 
+magnitude_thresholds = {
+    "Very High": 7.0,
+    "High": 6.0,
+    "Medium": 5.0,
+    "Low": 4.0,
+    "Very Low": 0.0,
+}
+
 suggested_actions = {
     "Very High": "Consider reinforcing your living space and having emergency supplies readily available.",
     "High": "Ensure you have an evacuation plan in place and regularly participate in emergency drills.",
@@ -21,5 +29,5 @@ factors = {
     "experience_emergency": (True, 0.1, 0.0),
     "medical_conditions": (True, 0.1, 0.0),
     "participation_drills": (True, 0.1, 0.0),
-    "communication_device": (True, 0.1, 0.0)
+    "comunication_device": (True, 0.1, 0.0)
 }

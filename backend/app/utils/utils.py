@@ -1,5 +1,3 @@
-from geoalchemy2 import Geometry
-
 from app.domain.models import Earthquake, LocationEarthquake, Magnitude, Source, Status
 
 
@@ -26,7 +24,6 @@ def create_location_object(cleaned_entry):
         longitude=longitude,
         geom=geom_wkt
     )
-
 
 
 def create_magnitude_object(cleaned_entry):
