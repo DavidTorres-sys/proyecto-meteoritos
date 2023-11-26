@@ -1,11 +1,131 @@
-<div class="d-flex w-100 h-100 justify-content-center">
-  <div id="map" class="map"></div>
-</div>
-
-<div class="footer-row d-md-flex justify-content-md-end mb-3">
-  <div class="d-grid gap-2 col-sm-12 col-md-4 col-lg-2 col-xl-2 p-1">
-    <button type="button" class="btn btn-submit" (click)="send()" id='fly'>
-      Search Meteorites
-    </button>
+<app-loader *ngIf="isLoading" [loading]="isLoading"></app-loader>
+<div class="p-3 mx-auto text-center mb-5">
+  <div class="map-container">
+    <div class="map-frame">
+      <div id="map"></div>
+    </div>
+    <button class="btn-primary btn-lg" (click)="send()">SEARCH</button>
   </div>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mapbox</h1>
+
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-secondary">
+            Here you can search for earthquakes that have occurred in any area
+            around the earth.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button "
+            class="btn btn-outline-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table w-100 mt-5 table-dark table-hover" *ngIf="showTable">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Time</th>
+        <th scope="col">Magnitude</th>
+        <th scope="col">MagError</th>
+        <th scope="col">MagType</th>
+        <th scope="col">Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="earthquakes.length === 0">
+        <td colspan="6">No earthquake found in the selected area.</td>
+      </tr>
+
+      <tr
+        *ngFor="let earthquake of earthquakes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); let i = index"
+        (click)="getEarthquake(earthquake.id)"
+      >
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ earthquake.time | date : "medium" }}</td>
+        <td>
+          <span
+            [ngClass]="{
+              'magnitude-pill-very-low':
+                earthquake.magnitude[0]?.mag >= magnitude_thresholds['Very Low'] &&
+                earthquake.magnitude[0]?.mag < magnitude_thresholds['Low'],
+              'magnitude-pill-low':
+                earthquake.magnitude[0]?.mag >= magnitude_thresholds['Low'] &&
+                earthquake.magnitude[0]?.mag < magnitude_thresholds['Medium'],
+              'magnitude-pill-medium':
+                earthquake.magnitude[0]?.mag >= magnitude_thresholds['Medium'] &&
+                earthquake.magnitude[0]?.mag < magnitude_thresholds['High'],
+              'magnitude-pill-high':
+                earthquake.magnitude[0]?.mag >= magnitude_thresholds['High'] &&
+                earthquake.magnitude[0]?.mag < magnitude_thresholds['Very High'],
+              'magnitude-pill-very-high':
+                earthquake.magnitude[0]?.mag >= magnitude_thresholds['Very High']
+            }"
+          >
+            {{ earthquake.magnitude[0]?.mag }}
+          </span>
+        </td>
+        <td>{{ earthquake.magnitude[0]?.magError }}</td>
+        <td>{{ earthquake.magnitude[0]?.magType }}</td>
+        <td>
+          ({{ earthquake.location_earthquake[0]?.latitude }},
+          {{ earthquake.location_earthquake[0]?.longitude }})
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6">
+          <ul class="pagination justify-content-center mt-3">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a
+                class="page-link"
+                (click)="setCurrentPage(currentPage - 1)"
+                aria-label="Previous"
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" *ngFor="let page of getPages()">
+              <a class="page-link" (click)="setCurrentPage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+              <a
+                class="page-link"
+                (click)="setCurrentPage(currentPage + 1)"
+                aria-label="Next"
+              >
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 </div>

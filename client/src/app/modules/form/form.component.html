@@ -1,23 +1,274 @@
-<app-navbar></app-navbar>
+<app-loader *ngIf="isLoading" [loading]="isLoading"></app-loader>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Form</h1>
 
-<div class="formulario">
-    <div class="head">
-        <p>{{labels.formulario}}</p>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary">
+          Fill out the form and find out if you are in an earthquake risk area
+          and how prepared you would be!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button "
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
     </div>
-    <form>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+</div>
+<form
+  [formGroup]="form"
+  class="example-stepper p-5 card text-center"
+  *ngIf="!send"
+>
+  <mat-stepper [linear]="true">
+    <!-- Step 1 -->
+
+    <mat-step>
+      <ng-template matStepLabel>Your Location</ng-template>
+      <ng-template matStepContent>
+        <div class="map-container">
+          <div class="map-frame">
+            <div id="map"></div>
+          </div>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
+        <div>
+          <button mat-button matStepperNext class="button-primary">Next</button>
         </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </ng-template>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Housing Type</ng-template>
+      <ng-template matStepContent>
+        <p>What kind of house do you live in?</p>
+        <mat-radio-group formControlName="housing_type">
+          <mat-radio-button value="Apartment">Apartment</mat-radio-button>
+          <mat-radio-button value="House">House</mat-radio-button>
+          <mat-radio-button value="Other">Other</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperPrevious class="button-primary">
+            Back
+          </button>
+          <button mat-button matStepperNext class="button-primary">Next</button>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+      </ng-template>
+    </mat-step>
+
+    <!-- Step 2 -->
+    <mat-step>
+      <ng-template matStepLabel>Emergency Resources</ng-template>
+      <ng-template matStepContent>
+        <p>
+          In your house there is accessibility of emergency resources such as a
+          first aid kit, flashlight, radio, non-perishable food and drinking
+          water?
+        </p>
+        <mat-radio-group formControlName="emergency_resources">
+          <mat-radio-button [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperPrevious class="button-primary">
+            Back
+          </button>
+          <button mat-button matStepperNext class="button-primary">Next</button>
+        </div>
+      </ng-template>
+    </mat-step>
+
+    <!-- Step 3 -->
+    <mat-step>
+      <ng-template matStepLabel>Evacuation Plan</ng-template>
+      <ng-template matStepContent>
+        <p>
+          Do you have an evacuation plan in case of a natural disaster, this
+          could include evacuation routes, meeting points and emergency
+          contacts?
+        </p>
+        <mat-radio-group formControlName="evacuation_plan">
+          <mat-radio-button [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperPrevious class="button-primary">
+            Back
+          </button>
+          <button mat-button matStepperNext class="button-primary">Next</button>
+        </div>
+      </ng-template>
+    </mat-step>
+
+    <!-- Step 4 -->
+    <mat-step>
+      <ng-template matStepLabel>Experience in Emergency Situation</ng-template>
+      <ng-template matStepContent>
+        <p>
+          Do you have knowledge about earthquakes, their possible consequences
+          and recommended safety measures?
+        </p>
+        <mat-radio-group formControlName="experience_emergency">
+          <mat-radio-button [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperPrevious class="button-primary">
+            Back
+          </button>
+          <button mat-button matStepperNext class="button-primary">Next</button>
+        </div>
+      </ng-template>
+    </mat-step>
+
+    <!-- Step 5 -->
+    <mat-step>
+      <ng-template matStepLabel>participation in Drills</ng-template>
+      <ng-template matStepContent>
+        <p>
+          Have you participated in emergency drills or training related to
+          natural disasters?
+        </p>
+        <mat-radio-group formControlName="participation_drills">
+          <mat-radio-button [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperPrevious class="button-primary">
+            Back
+          </button>
+          <button mat-button matStepperNext class="button-primary">Next</button>
+        </div>
+      </ng-template>
+    </mat-step>
+
+
+    <mat-step>
+      <ng-template matStepLabel>Medical Conditions</ng-template>
+      <ng-template matStepContent>
+        <p>
+          Do you have any illness or medical condition that you think may affect
+          your mobility?
+        </p>
+        <mat-radio-group formControlName="medical_conditions">
+          <mat-radio-button [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+        <div>
+          <button mat-button matStepperPrevious class="button-primary">
+            Back
+          </button>
+          <button mat-button matStepperNext class="button-primary">Next</button>
+        </div>
+      </ng-template>
+    </mat-step>
+
+    <!-- Final Step -->
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <button mat-button matStepperPrevious class="button-primary">
+          Back
+        </button>
+        <button
+          mat-button
+          [disabled]="form.invalid"
+          (click)="submitForm()"
+          class="button-primary"
+        >
+          Submit
+        </button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</form>
+
+<div class="container p-5" *ngIf="send && !isLoading">
+  <div class="card card-result p-5">
+    <div class="row regular-row mt-2">
+      <div class="col-12">
+        <span class="span-side"> You live in an area of risk </span>
+        <span
+          class="span"
+          [ngClass]="{
+            'magnitude-pill-very-low':
+              formResponse.average_magnitude[0] === 'Very Low',
+            'magnitude-pill-low': formResponse.average_magnitude[0] === 'Low',
+            'magnitude-pill-medium':
+              formResponse.average_magnitude[0] === 'Medium',
+            'magnitude-pill-high': formResponse.average_magnitude[0] === 'High',
+            'magnitude-pill-very-high':
+              formResponse.average_magnitude[0] === 'Very High'
+          }"
+        >
+          {{ formResponse.average_magnitude[0] | uppercase }}
+        </span>
+      </div>
+    </div>
+
+    <div class="col-12 mt-5">
+      <span class="span-side">
+        your preparation in an earthquake situation is
+      </span>
+      <span
+        class="span"
+        [ngClass]="{
+          'suggested-pill-very-high':
+            formResponse.suggested_actions[0] === 'Very High',
+          'suggested-pill-high': formResponse.suggested_actions[0] === 'High',
+          'suggested-pill-medium':
+            formResponse.average_magnitude[0] === 'Medium',
+          'suggested-pill-low': formResponse.suggested_actions[0] === 'Low',
+          'suggested-pill-very-low':
+            formResponse.suggested_actions[0] === 'Very Low'
+        }"
+      >
+        {{ formResponse.suggested_actions[0] | uppercase }}
+      </span>
+    </div>
+
+    <div class="row regular-row mt-5">
+      <div class="col-12">
+        <h1 class="suggestions-title">Suggestions</h1>
+        <ul *ngFor="let suggestions of formResponse.specific_suggestions">
+          <li class="span-side">{{ suggestions }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row regular-row mt-5 d-flex justify-content-end">
+      <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+        <button class="button-primary" [routerLink]="['/home']">
+          Back to Home
+        </button>
+      </div>
+      <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+        <button class="button-primary" [routerLink]="['/mapbox']">
+          Mapbox
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

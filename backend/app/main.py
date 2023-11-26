@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.services.crud.tables_data import get_tables_have_data
 from app.utils.initialization import init_data_on_startup
 from app.utils.database import get_db, logger  
@@ -11,6 +12,21 @@ models.Base.metadata.create_all(bind=engine)
 
 # Create FastAPI app instance
 app = FastAPI()
+
+# Define the list of allowed origins
+origins = [
+    "http://localhost",
+    "http://localhost:4200",
+]
+
+# Add CORS middleware to the FastAPI app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],  
+)
 
 # Dependency to get the database session
 app.dependency_overrides[get_db] = get_db

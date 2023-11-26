@@ -1,0 +1,61 @@
+.map-container {
+  position: relative;
+  border-radius: 5em;
+}
+
+.map-frame {
+  height: 50vh; /* Adjusted to 50% of the viewport height */
+}
+
+#map {
+  border-radius: 5em;
+  height: 100%;
+  width: 100%;
+}
+
+.card {
+  margin-top: 10em;
+  border-radius: 5em;
+  box-shadow: 0 4px 30px 0 rgb(254, 254, 254);
+}
+
+
+.magnitude-pill-very-high,
+.magnitude-pill-high,
+.magnitude-pill-medium,
+.magnitude-pill-low,
+.magnitude-pill-very-low {
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+  border-radius: 10px;
+  margin: 0;
+}
+
+.magnitude-pill-very-high {
+  background-color: darkred;
+  color: white;
+}
+
+.magnitude-pill-high {
+  background-color: red;
+  color: white;
+}
+
+.magnitude-pill-medium {
+  background-color: yellow;
+  color: black;
+}
+
+.magnitude-pill-low {
+  background-color: green;
+  color: white;
+}
+
+.magnitude-pill-very-low {
+  background-color: darkgreen;
+  color: white;
+}

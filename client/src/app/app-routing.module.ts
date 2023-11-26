@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MapboxComponent } from './modules/mapbox/mapbox.component';
 import { HomeComponent } from './modules/home/home.component';
 import { FormComponent } from './modules/form/form.component';
+import { EarthquakeViewComponent } from './modules/earthquake-view/earthquake-view.component';
+import { MapChartComponent } from './modules/map-chart/map-chart.component';
 
 const routes: Routes = [
   {
@@ -20,6 +22,14 @@ const routes: Routes = [
   {
     path: 'mapbox',
     component: MapboxComponent,
+  },
+  {
+    path: 'earthquake-view/:id',
+    component: EarthquakeViewComponent,
+  },
+  {
+    path: 'map-chart',
+    component: MapChartComponent,
   },
   {
     path: '**',

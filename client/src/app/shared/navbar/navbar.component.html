@@ -1,38 +1,74 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar bg-light fixed-top">
   <div class="container-fluid">
-    <img src="./assets/logo.png" />
     <button
       class="navbar-toggler"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a
-            class="nav-link active"
+    <div class="d-flex justify-content-start align-items-center">
+      <img src="./assets/logo.png" />
+      <h5>Quake Hub</h5>
+    </div>
+    <div
+      class="offcanvas offcanvas-start text-center"
+      tabindex="-1"
+      id="offcanvasNavbar"
+      aria-labelledby="offcanvasNavbarLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Quake Hub</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li
+            class="nav-link active nav-item"
             aria-current="page"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
             [routerLink]="['/home']"
             routerLinkActive="router-link-active"
-            >HOME</a
           >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
+            <span>
+              <i class="fas fa-home"></i>
+              Home
+            </span>
+          </li>
+          <li
+            class="nav-item nav-link"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+            [routerLink]="['/mapbox']"
+            routerLinkActive="router-link-active"
+          >
+            <span>
+              <i class="fa fa-map" aria-hidden="true"></i>
+              Mapbox
+            </span>
+          </li>
+          <li
+            class="nav-link nav-item"
+            aria-label="Close"
+            data-bs-dismiss="offcanvas"
             [routerLink]="['/form']"
             routerLinkActive="router-link-active"
-            >FORMULARIO</a
           >
-        </li>
-      </ul>
+          <span>
+            <i class="fa fa-rocket" aria-hidden="true"></i>
+            Form
+          </span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>

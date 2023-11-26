@@ -1,2 +1,16 @@
-<app-navbar></app-navbar>
-<app-carousel></app-carousel>
+<div class="container d-flex align-items-center">
+  <div class="col-sm-12 col-md-12 col-lg-12 col-12 d-flex justify-content-end">
+    <div class="card p-5 w-50 h-100">
+      <h1 class="fs-1">Welcome to Quake Hub</h1>
+      <p class="text-secondary">
+        Quake Hub is an application where you can find out if you live in an
+        earthquake risk area and what precautions are they taking in case of
+        one!
+      </p>
+      <div class="d-flex justify-content-end">
+        <button class="btn shadow" [routerLink]="['/form']">Find out!</button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-earth-animation></app-earth-animation>

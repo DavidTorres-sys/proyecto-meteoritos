@@ -1,16 +1,16 @@
 thresholds = {
-    "Very High": 0.8,
-    "High": 0.6,
+    "Very Low": 0.8,
+    "Low": 0.6,
     "Medium": 0.4,
-    "Low": 0.2,
-    "Very Low": 0.0,
+    "High": 0.2,
+    "Very High": 0.0,
 }
 
 magnitude_thresholds = {
     "Very High": 7.0,
     "High": 6.0,
-    "Medium": 5.0,
-    "Low": 4.0,
+    "Medium": 4.0,
+    "Low": 3.0,
     "Very Low": 0.0,
 }
 

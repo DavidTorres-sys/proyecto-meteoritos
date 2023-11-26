@@ -1,23 +1,206 @@
-.formulario {
-    margin: auto;
-    padding-top: 110px;
-    max-width: 800px;
+.example-stepper {
+  margin-top: 8px;
 }
 
-.head {
-    background-color: var(--neutroLuz);
-    height: 40px;
+
+
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Adjust the height as needed */
 }
 
-form {
-    padding: 15px;
-    border: 1px solid var(--neutroLuz);
-    background-color: #E6E6E6;
+.example-stepper {
+  background-color: #fff;
+  margin-top: 5%;
+  height: 80%;
+  width: 80%;
+}
+
+.map-container {
+  position: relative;
+  border-radius: 5em;
+}
+
+.modal {
+  z-index: 10000;
+  margin-top: 5em;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.map-frame {
+  height: 50vh; /* Adjusted to 50% of the viewport height */
+}
+
+#map {
+  margin-top: 1em;
+  border-radius: 5em;
+  height: 100%;
 }
 
 p {
-    font-weight: bold;
-    text-align: center;
-    padding: 7px; 
+  text-align: center;
+  margin-top: 1em;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 2em;
 }
 
+.button-primary {
+  cursor: pointer;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  border-radius: 5em;
+  background: linear-gradient(
+    90deg,
+    rgb(74, 2, 132) 0%,
+    rgb(68, 2, 131) 0%,
+    rgb(68, 2, 131) 100%
+  );
+  color: white !important;
+  font-size: 1em;
+  padding: 1em;
+  border: none;
+  width: 10em;
+  height: 3em;
+}
+
+.text-secondary {
+  color: #6c757d !important;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+ul,
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  margin-top: 5em;
+  padding: 3em;
+  border-radius: 5em;
+  box-shadow: 0 4px 30px 0 rgb(254, 254, 254);
+}
+
+.card-result {
+  background-color: #000;
+  color: white;
+}
+
+.span {
+  font-weight: bold;
+}
+
+.magnitude-pill-very-high,
+.magnitude-pill-high,
+.magnitude-pill-medium,
+.magnitude-pill-low,
+.magnitude-pill-very-low {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 10px;
+  margin: 0;
+}
+
+.magnitude-pill-very-high {
+  color: darkred;
+}
+
+.magnitude-pill-high {
+  color: red;
+}
+
+.magnitude-pill-medium {
+  color: yellow;
+}
+
+.magnitude-pill-low {
+  color: green;
+}
+
+.magnitude-pill-very-low {
+  color: darkgreen;
+}
+
+.span-size,
+.span {
+  font-size: 2em;
+}
+
+.suggested-pill-very-high,
+.suggested-pill-high,
+.suggested-pill-medium,
+.suggested-pill-low,
+.suggested-pill-very-low {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 10px;
+  margin: 0;
+}
+
+.suggested-pill-very-low {
+  color: darkred;
+}
+
+.suggested-pill-low {
+  color: red;
+}
+
+.suggested-pill-medium {
+  color: yellow;
+}
+
+.suggested-pill-high {
+  color: green;
+}
+
+.suggested-pill-very-very-high {
+  color: darkgreen;
+}
+
+.span-size,
+.span {
+  font-size: 2em;
+}
+
+.col-12 {
+  font-size: 2em;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
+
+li {
+  margin-top: 1em;
+  font-size: 0.8em;
+}
+
+.suggestions-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
