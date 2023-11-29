@@ -9,7 +9,6 @@ class FormBase(BaseModel):
     medical_conditions: bool
     participation_drills: bool
     comunication_device: bool
-    result: Optional[str] = None
 
 class FormCreate(FormBase):
     pass

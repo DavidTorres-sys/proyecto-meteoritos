@@ -36,6 +36,10 @@ export class EarthAnimationComponent implements OnInit {
     this.addLights();
   }
 
+  ngOnDestroy(): void {
+    this.renderer.domElement.remove();
+  }
+
   createStarfield() {
     const starGeometry = new THREE.BufferGeometry();
     const starMaterial = new THREE.PointsMaterial({

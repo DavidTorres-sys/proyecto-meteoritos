@@ -1,0 +1,116 @@
+<app-loader [loading]="isLoading"></app-loader>
+<div class="p-5">
+  <div class="card p-5 d-flex">
+    <div class="map-container row">
+      <div class="col-sm-6 map-frame">
+        <div id="map"></div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row regular-row mt-2 d-flex">
+
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Date</div>
+              <div class="col-12">
+                {{ earthquake.time | date : "medium" }}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Updated</div>
+              <div class="col-12">
+                {{ earthquake.updated | date : "medium" }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row regular-row mt-2 d-flex">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Magnitude</div>
+              <div class="col-12">
+                <span
+                  [ngClass]="{
+                    'magnitude-pill-very-low': earthquake.magnitude[0]?.mag >= magnitude_thresholds['Very Low'] && earthquake.magnitude[0]?.mag < magnitude_thresholds['Low'],
+                    'magnitude-pill-low': earthquake.magnitude[0]?.mag >= magnitude_thresholds['Low'] && earthquake.magnitude[0]?.mag < magnitude_thresholds['Medium'],
+                    'magnitude-pill-medium': earthquake.magnitude[0]?.mag >= magnitude_thresholds['Medium'] && earthquake.magnitude[0]?.mag < magnitude_thresholds['High'],
+                    'magnitude-pill-high': earthquake.magnitude[0]?.mag >= magnitude_thresholds['High'] && earthquake.magnitude[0]?.mag < magnitude_thresholds['Very High'],
+                    'magnitude-pill-very-high': earthquake.magnitude[0]?.mag >= magnitude_thresholds['Very High']
+                  }"
+                >
+                  {{ earthquake.magnitude[0]?.mag }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Magnitude Type</div>
+              <div class="col-12">
+                {{ earthquake.magnitude[0].magType }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="row regular-row mt-2 d-flex">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Magnitude Error</div>
+              <div class="col-12">
+                {{ earthquake.magnitude[0].magError}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Magnitude Nst</div>
+              <div class="col-12">
+                {{ earthquake.magnitude[0].magNst }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row regular-row mt-2 d-flex">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">location Source</div>
+              <div class="col-12">
+                {{ earthquake.source[0].locationSource}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Magnitude Source</div>
+              <div class="col-12">
+                {{ earthquake.source[0].magSource }}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row regular-row mt-2 d-flex">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="row">
+              <div class="col-12 label text-secondary fw-bold">Location</div>
+              <div class="col-12">
+                ({{ earthquake.location_earthquake[0].latitude}}, {{ earthquake.location_earthquake[0].longitude }})
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

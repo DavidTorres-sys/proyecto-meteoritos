@@ -28,7 +28,7 @@ def get_earthquakes(db: Session, skip: int = 0, limit: int = 100):
     return earthquake_crud.read_all(db, skip=skip, limit=limit)
 
 
-def get_earthquake_data(db: Session, user_latitude: float, user_longitude: float, radius: float = 500000):
+def get_earthquake_data(db: Session, user_latitude: float, user_longitude: float, limit: int, radius: float = 400000):
     """
     Returns a list of earthquake data within a given radius of the user's location.
     Parameters:
@@ -50,7 +50,7 @@ def get_earthquake_data(db: Session, user_latitude: float, user_longitude: float
             .join(Magnitude, Earthquake.id == Magnitude.earthquake_id)
             .filter(func.ST_DistanceSphere(LocationEarthquake.geom, user_point) <= radius)
             .order_by(Magnitude.mag.desc())
-            .limit(100)
+            .limit(limit)
             .all()
         )
     except Exception as e:
@@ -74,7 +74,7 @@ def calculate_average_magnitude(earthquake_data):
     ]
 
     if magnitudes:
-        average_magnitude = sum(magnitudes) / 100
+        average_magnitude = sum(magnitudes) / 200
 
         # Find the category based on the average magnitude
         for category, threshold in magnitude_thresholds.items():
@@ -95,21 +95,19 @@ def calculate_probability(model_answers):
     """
 
     # Extract relevant information from model answers
-    housing_factor = 0.1 if model_answers.housing_type == "Apartment" else 0.0
-    emergency_resources_factor = 0.0 if model_answers.emergency_resources else 0.2
-    evacuation_plan_factor = 0.0 if model_answers.evacuation_plan else 0.2
-    experience_emergency_factor = 0.0 if model_answers.experience_emergency else 0.1
-    medical_conditions_factor = 0.0 if model_answers.medical_conditions else 0.1
-    participation_drills_factor = 0.0 if model_answers.participation_drills else 0.1
-    comunication_device_factor = 0.0 if model_answers.comunication_device else 0.1
+    housing_type = 0.1 if model_answers.housing_type == "Apartment" else 0.0
+    emergency_resources = 0.0 if model_answers.emergency_resources else 0.2
+    evacuation_plan = 0.0 if model_answers.evacuation_plan else 0.2
+    experience_emergency = 0.0 if model_answers.experience_emergency else 0.1
+    medical_conditions = 0.0 if model_answers.medical_conditions else 0.1
+    participation_drills = 0.0 if model_answers.participation_drills else 0.1
+    comunication_device = 0.0 if model_answers.comunication_device else 0.1
 
-    # Combine factors to get the final probability
-    probability = housing_factor + \
-        emergency_resources_factor + evacuation_plan_factor + \
-        experience_emergency_factor + medical_conditions_factor + \
-        participation_drills_factor + comunication_device_factor
+    probability = housing_type + \
+        emergency_resources + evacuation_plan + \
+        experience_emergency + medical_conditions + \
+        participation_drills + comunication_device
 
-    # Ensure probability is within the valid range [0, 1]
     probability = max(0.0, min(1.0, probability))
 
     for category, threshold in thresholds.items():
@@ -138,3 +136,19 @@ def generate_specific_suggestions(model_answers):
         suggestions.append(SUGGESTION_COMMUNICATION_DEVICE)
 
     return suggestions
+
+
+def analisys_earthquakes(earthquake_data):
+    result = []
+    for earthquake in earthquake_data:
+        mag = max(
+            magnitude.mag for magnitude in earthquake.magnitude) if earthquake.magnitude else None
+
+        result.append({'date': earthquake.time, 'mag': mag})
+
+    geo_coord_map = {earthquake.time: [location.longitude, location.latitude]
+                     for earthquake in earthquake_data for location in earthquake.location_earthquake}
+    print(result)
+    print("geoCoordMap:", geo_coord_map)
+
+    return {"result": result, "geo_coord_map": geo_coord_map}
