@@ -75,7 +75,7 @@ export class MapboxComponent implements AfterViewInit, OnInit {
     marker.on('dragend', (e) => {
       this.latitude = marker.getLatLng().lat;
       this.longitude = marker.getLatLng().lng;
-      console.log(this.latitude, this.longitude);
+      // console.log(this.latitude, this.longitude);
     });
   }
 
